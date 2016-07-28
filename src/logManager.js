@@ -107,7 +107,7 @@ var configureAppenders_ = function (appenders) {
 	if (appenders instanceof Array) {
 		var count = appenders.length;
     for (let i = 0; i < count; i++) {
-      addAppender(appenders[i]);
+      addAppender_(appenders[i]);
 		}
 	}
 };
@@ -146,6 +146,16 @@ var getLoggers_ = function (logLevel) {
 
 };
 
+var addAppender_ = function(appender) {
+  if (finalized_ && !configuration_.allowAppenderInjection) {
+    console.error('Cannot add appender when configuration finalized');
+    return;
+  }
+
+  validateAppender_(ALLOWED_APPENDERS[appender]);
+  appenders_.push(ALLOWED_APPENDERS[appender]);
+};
+
 /**
  * Adds an appender to the appender queue. If the stack is finalized, and
  * the allowAppenderInjection is set to false, then the event will not be
@@ -156,15 +166,9 @@ var getLoggers_ = function (logLevel) {
  * @params {APPENDER} appender
  */
 export function addAppender(appender) {
-
-	if (finalized_ && !configuration_.allowAppenderInjection) {
-		console.error('Cannot add appender when configuration finalized');
-		return;
-	}
-
-  validateAppender_(ALLOWED_APPENDERS[appender]);
-  appenders_.push(ALLOWED_APPENDERS[appender]);
-
+  //adding appender
+  addAppender_(appender);
+  configureLoggers_(configuration_.loggers);
 }
 
 /**
