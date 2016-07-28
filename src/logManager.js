@@ -84,18 +84,7 @@ export function configure(config) {
 
   configureLoggers_(config.loggers);
 
-  if (config.tagLayout) {
-    formatter.preCompile(config.tagLayout);
-    for (var logKey in loggers_) {
-      if (loggers_.hasOwnProperty(logKey)) {
-        for (var key in loggers_[logKey]) {
-          if (loggers_[logKey].hasOwnProperty(key)) {
-            loggers_[logKey][key].setTagLayout(config.tagLayout);
-          }
-        }
-      }
-    }
-  }
+  configureTagLayout_(config.tagLayout);
 
   configuration_ = config;
 
@@ -110,6 +99,21 @@ var configureAppenders_ = function (appenders) {
       addAppender_(appenders[i]);
 		}
 	}
+};
+
+var configureTagLayout_ = function(tagLayout) {
+  if (tagLayout) {
+    formatter.preCompile(tagLayout);
+    for (var logKey in loggers_) {
+      if (loggers_.hasOwnProperty(logKey)) {
+        for (var key in loggers_[logKey]) {
+          if (loggers_[logKey].hasOwnProperty(key)) {
+            loggers_[logKey][key].setTagLayout(tagLayout);
+          }
+        }
+      }
+    }
+  }
 };
 
 var configureLoggers_ = function (loggers) {
@@ -130,6 +134,7 @@ var configureLoggers_ = function (loggers) {
 	}
 
 };
+
 
 var getLoggers_ = function (logLevel) {
 
@@ -169,6 +174,7 @@ export function addAppender(appender) {
   //adding appender
   addAppender_(appender);
   configureLoggers_(configuration_.loggers);
+  configureTagLayout_(configuration_.tagLayout);
 }
 
 /**
