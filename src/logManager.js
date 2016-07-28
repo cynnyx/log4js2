@@ -10,6 +10,7 @@ import { Logger } from './logger/logger';
 import * as LogLevel from './const/logLevel';
 
 import * as consoleAppender from './appenders/consoleAppender';
+import * as storageAppender from './appenders/storageAppender';
 
 /**
  * Holds the definition for the appender closure
@@ -37,6 +38,12 @@ var LOG_EVENT;
  * @typedef {{ logLevel : number }}
  */
 var LOGGER;
+
+
+var ALLOWED_APPENDERS = {
+   'consoleAppender': consoleAppender.ConsoleAppender,
+   'storageAppender': storageAppender.StorageAppender
+};
 
 /** @const */
 const DEFAULT_CONFIG = {
@@ -73,38 +80,36 @@ export function configure(config) {
 		return;
 	}
 
-	configureAppenders_(config.appenders, function () {
+  configureAppenders_(config.appenders);
 
-		configureLoggers_(config.loggers);
+  configureLoggers_(config.loggers);
 
-		if (config.tagLayout) {
-			formatter.preCompile(config.tagLayout);
-			for (var logKey in loggers_) {
-				if (loggers_.hasOwnProperty(logKey)) {
-					for (var key in loggers_[logKey]) {
-						if (loggers_[logKey].hasOwnProperty(key)) {
-							loggers_[logKey][key].setTagLayout(config.tagLayout);
-						}
-					}
-				}
-			}
-		}
+  if (config.tagLayout) {
+    formatter.preCompile(config.tagLayout);
+    for (var logKey in loggers_) {
+      if (loggers_.hasOwnProperty(logKey)) {
+        for (var key in loggers_[logKey]) {
+          if (loggers_[logKey].hasOwnProperty(key)) {
+            loggers_[logKey][key].setTagLayout(config.tagLayout);
+          }
+        }
+      }
+    }
+  }
 
-		configuration_ = config;
+  configuration_ = config;
 
-	});
 
 }
 
-var configureAppenders_ = function (appenders, callback) {
+var configureAppenders_ = function (appenders) {
 
 	if (appenders instanceof Array) {
 		var count = appenders.length;
-		for (var i = 0; i < count; i++) {
-			callback();
+    for (let i = 0; i < count; i++) {
+      addAppender(appenders[i]);
 		}
 	}
-
 };
 
 var configureLoggers_ = function (loggers) {
@@ -157,8 +162,8 @@ export function addAppender(appender) {
 		return;
 	}
 
-	validateAppender_(appender);
-	appenders_.push(appender);
+  validateAppender_(ALLOWED_APPENDERS[appender]);
+  appenders_.push(ALLOWED_APPENDERS[appender]);
 
 }
 
@@ -189,6 +194,9 @@ var validateAppender_ = function (appender) {
 		appenderObj.setTagLayout(configuration_.tagLayout);
 	}
 
+  if(typeof appenderObj['init'] == 'function') {
+    appenderObj.init();
+  }
 };
 
 /**
@@ -283,5 +291,3 @@ export function setLogLevel(logLevel, logger) {
 	}
 
 }
-
-addAppender(consoleAppender.ConsoleAppender);
