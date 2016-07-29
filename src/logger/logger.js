@@ -98,7 +98,7 @@ export function Logger(context, appenderObj) {
 			lineNumber : null,
 			logger : logContext_,
       message : [],
-			method : args.callee.caller,
+      method : '',
 			properties : undefined,
 			relative : logTime.getTime() - relative_,
 			sequence : logSequence_++
