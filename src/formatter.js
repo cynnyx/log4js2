@@ -379,10 +379,18 @@ var getFormatterParams_ = function(command) {
  * @return {string}
  */
 var formatLogEvent_ = function(formatter, logEvent) {
-
 	var response;
-	var message = '';
+  var message = [];
 	var count = formatter.length;
+
+  var _addMessage = function(mes) {
+    if(mes instanceof Array) {
+      message = message.concat(mes);
+    } else {
+      message.push(mes);
+    }
+  };
+
 	for (var i = 0; i < count; i++) {
 		if (formatter[i] !== null) {
 
@@ -390,18 +398,18 @@ var formatLogEvent_ = function(formatter, logEvent) {
 
 				response = formatter[i].formatter(logEvent, formatter[i].params);
 				if (response != null) {
-					message += response;
+          _addMessage(response);
 				}
-				message += formatter[i].after;
+        _addMessage(formatter[i].after);
 
 			} else {
-				message += formatter[i];
+        _addMessage(formatter[i]);
 			}
 
 		}
 	}
 
-	return message.trim();
+  return message;
 
 };
 

@@ -97,27 +97,18 @@ export function Logger(context, appenderObj) {
 			level : level,
 			lineNumber : null,
 			logger : logContext_,
-			message : '',
+      message : [],
 			method : args.callee.caller,
 			properties : undefined,
 			relative : logTime.getTime() - relative_,
 			sequence : logSequence_++
 		};
 
-		let messageStubs = 0;
 		for (let i = 0; i < args.length; i++) {
-
-			if (i === 0) {
-				loggingEvent.message = args[i];
-        let stubs = loggingEvent.message.match(/\{\}/g);
-				messageStubs = (stubs instanceof Array) ? stubs.length : 0;
-			} else if (messageStubs > 0) {
-        loggingEvent.message = loggingEvent.message.replace(/\{\}/, JSON.stringify(args[i]));
-				messageStubs--;
-			} else if (args[i] instanceof Error) {
+      if (args[i] instanceof Error) {
 				loggingEvent.error = args[i];
 			} else {
-				loggingEvent.properties = args[i];
+        loggingEvent.message.push(args[i]);
 			}
 
 		}

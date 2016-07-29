@@ -10,10 +10,10 @@ import * as formatter from '../formatter';
 
 export function ConsoleAppender() {
 
-	/** @type {string} */
-	let tagLayout_ = '%m';
-	/** @type {number} */
-	let logLevel_ = LogLevel.INFO;
+  /** @type {string} */
+  let tagLayout_ = '%m';
+  /** @type {number} */
+  let logLevel_ = LogLevel.INFO;
 
 	/**
 	 * @function
@@ -34,17 +34,17 @@ export function ConsoleAppender() {
 	 */
 	function appendToConsole_(loggingEvent) {
 
-		let message = formatter.format(tagLayout_, loggingEvent);
+    let message = formatter.format(tagLayout_, loggingEvent);
 
 		if (loggingEvent.level == LogLevel.ERROR) {
-			console.error(message);
+      console.error.apply(this, message);
 		} else if (loggingEvent.level == LogLevel.WARN) {
-			console.warn(message);
+      console.warn.apply(this, message);
 		} else if (loggingEvent.level == LogLevel.INFO) {
-			console.info(message);
+      console.info.apply(this, message);
 		} else if (loggingEvent.level == LogLevel.DEBUG ||
 			loggingEvent.level == LogLevel.TRACE) {
-			console.log(message);
+      console.log.apply(this, message);
 		}
 
 	}

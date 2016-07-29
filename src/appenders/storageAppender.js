@@ -38,7 +38,7 @@ export function StorageAppender() {
       log4js2 = [];
     }
 
-    log4js2.push(message);
+    log4js2.push(message.join(' '));
     sessionStorage.setItem('log4js2', JSON.stringify(log4js2));
 
   }

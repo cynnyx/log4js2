@@ -33,13 +33,13 @@
         namedFunctionLogging();
         log4js.addAppender('storageAppender');
 
-        log.trace('This is a unnamed trace message {} {} {}', {a:"a", b: "b"}, {a:"a"},{b:"b"});
+        log.trace('This is a unnamed trace message', {a:"a", b: "b"}, {a:"a"},{b:"b"});
         log.debug('This is a unnamed debug message');
         log.info('This is a unnamed info message');
         log.warn('This is a unnamed warn message');
         log.error('This is a unnamed error message');
 
-        log.info('This is a test log with {}', 'parameters');
+        log.info('This is a test log with', 'parameters');
     </script>
 
 </body>
