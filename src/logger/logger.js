@@ -109,10 +109,10 @@ export function Logger(context, appenderObj) {
 
 			if (i === 0) {
 				loggingEvent.message = args[i];
-				let stubs = (/\{\}/g).exec(loggingEvent.message);
+        let stubs = loggingEvent.message.match(/\{\}/g);
 				messageStubs = (stubs instanceof Array) ? stubs.length : 0;
 			} else if (messageStubs > 0) {
-				loggingEvent.message = loggingEvent.message.replace(/\{\}/, args[i]);
+        loggingEvent.message = loggingEvent.message.replace(/\{\}/, JSON.stringify(args[i]));
 				messageStubs--;
 			} else if (args[i] instanceof Error) {
 				loggingEvent.error = args[i];
@@ -121,7 +121,6 @@ export function Logger(context, appenderObj) {
 			}
 
 		}
-
 		return loggingEvent;
 
 	}
