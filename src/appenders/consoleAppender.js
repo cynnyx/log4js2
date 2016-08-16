@@ -34,29 +34,29 @@ export function ConsoleAppender() {
 	 */
 	function appendToConsole_(loggingEvent) {
 
-    let message = formatter.format(tagLayout_, loggingEvent);
+    let messages = formatter.format(tagLayout_, loggingEvent);
 
     try {
       if (loggingEvent.level == LogLevel.ERROR) {
-        console.error.apply(this, message);
+        console.error.apply(console, messages);
       } else if (loggingEvent.level == LogLevel.WARN) {
-        console.warn.apply(this, message);
+        console.warn.apply(console, messages);
       } else if (loggingEvent.level == LogLevel.INFO) {
-        console.info.apply(this, message);
+        console.info.apply(console, messages);
       } else if (loggingEvent.level == LogLevel.DEBUG ||
         loggingEvent.level == LogLevel.TRACE) {
-        console.log.apply(this, message);
+        console.log.apply(console, messages);
       }
     } catch (e) {
       if (loggingEvent.level == LogLevel.ERROR) {
-        console.error(message.join(' '));
+        console.error(messages.join(' '));
       } else if (loggingEvent.level == LogLevel.WARN) {
-        console.warn(message.join(' '));
+        console.warn(messages.join(' '));
       } else if (loggingEvent.level == LogLevel.INFO) {
-        console.info(message.join(' '));
+        console.info(messages.join(' '));
       } else if (loggingEvent.level == LogLevel.DEBUG ||
         loggingEvent.level == LogLevel.TRACE) {
-        console.log(message.join(' '));
+        console.log(messages.join(' '));
       }
     }
 	}
