@@ -11,6 +11,7 @@ import * as LogLevel from './const/logLevel';
 
 import * as consoleAppender from './appenders/consoleAppender';
 import * as storageAppender from './appenders/storageAppender';
+import * as logglyAppender from './appenders/logglyAppender';
 
 /**
  * Holds the definition for the appender closure
@@ -42,7 +43,8 @@ var LOGGER;
 
 var ALLOWED_APPENDERS = {
    'consoleAppender': consoleAppender.ConsoleAppender,
-   'storageAppender': storageAppender.StorageAppender
+   'storageAppender': storageAppender.StorageAppender,
+   'logglyAppender':  logglyAppender.LogglyAppender
 };
 
 /** @const */
@@ -205,7 +207,7 @@ var validateAppender_ = function (appender) {
 	}
 
   if(typeof appenderObj['init'] == 'function') {
-    appenderObj.init();
+    appenderObj.init(configuration_);
   }
 };
 
