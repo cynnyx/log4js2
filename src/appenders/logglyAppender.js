@@ -22,7 +22,7 @@ export function LogglyAppender() {
    */
   function init(configuration_) {
     if (configuration_.logglyToken) {
-      logglyUrl = 'http://logs-01.loggly.com/inputs/' + configuration_.logglyToken + '/tag/http/';
+      logglyUrl = 'https://logs-01.loggly.com/inputs/' + configuration_.logglyToken + '/tag/http/';
     } else {
       console.error('Cannot add logglyAppender');
       return;
