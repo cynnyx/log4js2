@@ -36,9 +36,13 @@ export function LogglyAppender() {
 
   function append(loggingEvent) {
     let messages = formatter.format(tagLayout_, loggingEvent);
-    let oReq = new XMLHttpRequest();
-    oReq.open('POST', logglyUrl, true);
-    oReq.send(messages.join(' '));
+    try {
+      let oReq = new XMLHttpRequest();
+      oReq.open('POST', logglyUrl, true);
+      oReq.send(messages.join(' '));
+    } catch (e) {
+      console.log('This browser does not support XMLHttpRequest.');
+    }
   }
 
   /**
